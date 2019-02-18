@@ -7,7 +7,9 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Configuration.EnvironmentVariables;
+using Microsoft.Extensions.Configuration.FileExtensions;
+using Microsoft.Extensions;
 
 namespace StatlerWaldorfCorp.LocationService.Integration
 {
@@ -24,7 +26,8 @@ namespace StatlerWaldorfCorp.LocationService.Integration
                 .AddEnvironmentVariables()                
                 .Build();
 
-            var connectionString = config.GetSection("postgres:cstr").Value;
+            //var connectionString = config.GetSection("postgres:url").Value;
+            var connectionString = @"postgres://integrator:inteword@localhost:5432/locationservice";
             var optionsBuilder = new DbContextOptionsBuilder<LocationDbContext>();
             optionsBuilder.UseNpgsql(connectionString);
             this.context = new LocationDbContext(optionsBuilder.Options);                

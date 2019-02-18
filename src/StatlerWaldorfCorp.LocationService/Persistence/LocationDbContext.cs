@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using StatlerWaldorfCorp.LocationService.Models;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
@@ -20,9 +21,18 @@ namespace StatlerWaldorfCorp.LocationService.Persistence
         public DbSet<LocationRecord> LocationRecords {get; set;}
     }
 
-    public class LocationDbContextFactory : IDbContextFactory<LocationDbContext>
+    public class LocationDbContextFactory : IDesignTimeDbContextFactory<LocationDbContext>
     {
-        public LocationDbContext Create(DbContextFactoryOptions options)
+        // public LocationDbContext Create(DbContextFactoryOptions options)
+        // {
+        //     var optionsBuilder = new DbContextOptionsBuilder<LocationDbContext>();
+        //     var connectionString = Startup.Configuration.GetSection("postgres:cstr").Value;
+        //     optionsBuilder.UseNpgsql(connectionString);
+
+        //     return new LocationDbContext(optionsBuilder.Options);
+        // }
+
+        public LocationDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<LocationDbContext>();
             var connectionString = Startup.Configuration.GetSection("postgres:cstr").Value;

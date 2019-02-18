@@ -9,6 +9,7 @@ using System;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace StatlerWaldorfCorp.LocationService {
     public class Startup
@@ -28,8 +29,8 @@ namespace StatlerWaldorfCorp.LocationService {
             Configuration = builder.Build();
 
             this.loggerFactory = loggerFactory;
-            this.loggerFactory.AddConsole(LogLevel.Information);
-            this.loggerFactory.AddDebug();
+            // this.loggerFactory.AddConsole(minLevel: LogLevel.Information);
+            // this.loggerFactory.AddDebug();
 
             this.logger = this.loggerFactory.CreateLogger("Startup");
         }
@@ -38,6 +39,13 @@ namespace StatlerWaldorfCorp.LocationService {
 
         public void ConfigureServices(IServiceCollection services)
         {                                    
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddConfiguration(Configuration.GetSection("Logging"));
+                loggingBuilder.AddConsole();
+                loggingBuilder.AddDebug();
+            });
+            
             //var transient = Boolean.Parse(Configuration.GetSection("transient").Value);
             var transient = true;
             if (Configuration.GetSection("transient") != null) {
